@@ -6,4 +6,4 @@ COPY start_server.sh start_dedicated_server.sh
 COPY adminlist.txt /root/.config/unity3d/IronGate/Valheim/adminlist.txt
 EXPOSE 2456-2458/udp
 
-ENTRYPOINT ["bash", "./start_dedicated_server.sh" ]
+ENTRYPOINT ["/bin/bash", "./start_dedicated_server.sh" ]
