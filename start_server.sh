@@ -21,6 +21,6 @@ echo "Starting server PRESS CTRL-C to exit"
 printf "\n\nServer name is \"$SERVER_NAME\"\n"
 printf "Server password is $SERVER_PASSWORD\n\n"
 
-# NOTE: The -port argument is a lie. The game will be listening on port+1
+# NOTE: The -port argument is a lie. The game will be listening on port and port+1
 # If -port is 2456, the game will be listening on 2457.
 ./valheim_server.x86_64 -name $SERVER_NAME -port 2456 -world "Dedicated" -password $SERVER_PASSWORD -public 1
