@@ -4,7 +4,7 @@ A dedicated Valheim game server running in a container.
 
 ## Summary
 
-A very basic Valheim server.
+A very basic Valheim server, running 0.148.7.
 
 ```
 docker run -d -p 2456:2456/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim raykrueger/valheim
