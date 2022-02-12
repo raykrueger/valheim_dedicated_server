@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
 RUN curl -L --silent -o /usr/local/bin/gomplate https://github.com/hairyhenderson/gomplate/releases/download/v3.10.0/gomplate_linux-amd64 \
     && chmod +x /usr/local/bin/gomplate
 
-RUN steamcmd +login anonymous +force_install_dir /data +app_update 896660 +quit
+RUN steamcmd +force_install_dir /data +login anonymous +app_update 896660 +quit
 WORKDIR /data
 COPY start_server.sh ./
 
