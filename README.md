@@ -28,6 +28,12 @@ password.
 docker run -d -p 2456:2456/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim -e SERVER_NAME="My Valheim Server" -e SERVER_PASSWORD=BooshBooshBoosh raykrueger/valheim
 ```
 
+## Admins
+
+To add admins to the server you will need their Seam IDs. Once you have that you can use the `ADMINLIST` environment variable at startup.
+
+`docker run ... -e ADMINLIST=1234,5678 ...`
+
 ## Persistence
 
 The Valheim world save files are written to this path inside the container
