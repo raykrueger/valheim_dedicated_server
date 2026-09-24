@@ -11,7 +11,7 @@ if [ -z ${SERVER_NAME+x} ]; then
   SERVER_NAME="Valheim Dedicated Server by raykrueger"
 fi
 
-if [ -z ${SERVER_PASSWORD+x}]; then
+if [ -z ${SERVER_PASSWORD+x} ]; then
   SERVER_PASSWORD=$( rando )
 fi
 
@@ -23,6 +23,7 @@ echo "Starting server PRESS CTRL-C to exit"
 printf "\n\nServer name is \"$SERVER_NAME\"\n"
 printf "Server password is $SERVER_PASSWORD\n\n"
 
+mkdir -p "$(dirname "$ADMINFILE")"
 GOMPLATE_SUPPRESS_EMPTY=true gomplate -i '{{range (.Env.ADMINLIST | strings.Split ",")}}{{.}}{{print "\n"}}{{end}}' -o $ADMINFILE
 
 # NOTE: Per Iron Gate's official guide, Valheim uses the -port value AND
