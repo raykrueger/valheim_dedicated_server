@@ -25,6 +25,7 @@ printf "Server password is $SERVER_PASSWORD\n\n"
 
 GOMPLATE_SUPPRESS_EMPTY=true gomplate -i '{{range (.Env.ADMINLIST | strings.Split ",")}}{{.}}{{print "\n"}}{{end}}' -o $ADMINFILE
 
-# NOTE: The -port argument is a lie. The game will be listening on port and port+1
-# If -port is 2456, the game will be listening on 2457.
+# NOTE: Per Iron Gate's official guide, Valheim uses the -port value AND
+# port+1, both over UDP. With -port 2456: players connect on 2456 (game
+# traffic) and 2457 is used for the Steam server list/query. Forward both.
 exec ./valheim_server.x86_64 -name $SERVER_NAME -port 2456 -world "Dedicated" -password $SERVER_PASSWORD -public 1

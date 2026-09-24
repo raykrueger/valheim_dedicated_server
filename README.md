@@ -7,8 +7,12 @@ A dedicated Valheim game server running in a container.
 A very basic Valheim server, running 0.214.2.
 
 ```
-docker run -d -p 2456:2456/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim raykrueger/valheim
+docker run -d -p 2456:2456/udp -p 2457:2457/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim raykrueger/valheim
 ```
+
+The server uses two UDP ports (per Iron Gate's official guide): `2456` for
+game traffic and `2457` (port + 1) for the Steam server list/query. Forward
+both, or your server will accept players but never appear in the server list.
 
 ## Server name and password
 
@@ -25,7 +29,7 @@ You can set environment variables, at run time, to change the server name and
 password.
 
 ```
-docker run -d -p 2456:2456/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim -e SERVER_NAME="My Valheim Server" -e SERVER_PASSWORD=BooshBooshBoosh raykrueger/valheim
+docker run -d -p 2456:2456/udp -p 2457:2457/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim -e SERVER_NAME="My Valheim Server" -e SERVER_PASSWORD=BooshBooshBoosh raykrueger/valheim
 ```
 
 ## Admins
@@ -50,7 +54,7 @@ If you'd like to build this container and run it locally...
 
 ```
 docker build -t valheim .
-docker run -d -p 2456:2456/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim valheim
+docker run -d -p 2456:2456/udp -p 2457:2457/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim valheim
 ```
 
 Note that you can leave the raykrueger part out, because you're not me, and you're local names don't matter.
