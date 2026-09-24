@@ -1,75 +1,80 @@
 # raykrueger/valheim
 
-A dedicated Valheim game server running in a container.
+A Valheim dedicated server in a container — up and running in one command.
 
-## Summary
-
-A very basic Valheim server, running 0.214.2.
+Run a persistent Valheim world on your own hardware without wrestling with
+SteamCMD, libraries, or restart scripts. This image (running game version
+0.214.2) installs the server at build time, updates it from Steam at every
+start, and handles server naming, password, and admin list for you.
 
 ```
 docker run -d -p 2456:2456/udp -p 2457:2457/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim raykrueger/valheim
 ```
 
+## Ports
+
 The server uses two UDP ports (per Iron Gate's official guide): `2456` for
 game traffic and `2457` (port + 1) for the Steam server list/query. Forward
 both, or your server will accept players but never appear in the server list.
 
-## Server name and password
+## Configuration
 
-If you do not customize the server name and password at startup a password
-will be randomly generated at startup. The name is hardcoded, you'll want to
-change that.
+All configuration is done with environment variables at run time.
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `SERVER_NAME` | `Valheim Dedicated Server by raykrueger` | Name shown in the server list |
+| `SERVER_PASSWORD` | random 8-character string | Join password |
+| `ADMINLIST` | empty | Comma-separated Steam IDs with admin privileges |
+
+If you don't set `SERVER_PASSWORD`, one is generated at startup and printed
+to the container logs (`docker logs <container>`).
 
 ```
-Server name is "Valheim Dedicated Server by raykrueger"
-Server password is (random gibberish here)
+docker run -d -p 2456:2456/udp -p 2457:2457/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim -e SERVER_NAME="My Valheim Server" -e SERVER_PASSWORD=BooshBooshBoosh -e ADMINLIST=1234,5678 raykrueger/valheim
 ```
-
-You can set environment variables, at run time, to change the server name and
-password.
-
-```
-docker run -d -p 2456:2456/udp -p 2457:2457/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim -e SERVER_NAME="My Valheim Server" -e SERVER_PASSWORD=BooshBooshBoosh raykrueger/valheim
-```
-
-## Admins
-
-To add admins to the server you will need their Seam IDs. Once you have that you can use the `ADMINLIST` environment variable at startup.
-
-`docker run ... -e ADMINLIST=1234,5678 ...`
 
 ## Persistence
 
-The Valheim world save files are written to this path inside the container
-`/root/.config/unity3d/IronGate/Valheim`. In order to persist those files
-between container starts and stops, it is best to store them in a separate
-volume. That is done using `docker run -v`. If a /fully/qualified/path is
-given Docker will mount that point inside the container. If only a name is
-given, as is in our example, Docker will store that where it stores all
-volumes (usually /var/lib/docker/volumes).
+World saves, `adminlist.txt`, and friends are written to
+`/root/.config/unity3d/IronGate/Valheim` inside the container. Mount a
+volume there to keep them across container starts and stops:
+
+```
+-v valheim_world:/root/.config/unity3d/IronGate/Valheim
+```
+
+If you pass a name (like `valheim_world`), Docker stores the volume where it
+stores all volumes (usually `/var/lib/docker/volumes`). If you pass a
+fully-qualified path, Docker mounts that path directly.
 
 ## Building
 
-If you'd like to build this container and run it locally...
+To build the image locally:
 
 ```
 docker build -t valheim .
 docker run -d -p 2456:2456/udp -p 2457:2457/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim valheim
 ```
 
-Note that you can leave the raykrueger part out, because you're not me, and you're local names don't matter.
+A `Makefile` with `build`, `run`, and `shell` targets is included for local
+development.
 
 ## Running on AWS
 
-If you're interested in running this container on AWS, I have also built an
-AWS Cloud Development Kit library that will help. The
+If you'd rather not run this on your own hardware, the
 [@raykrueger/cdk-valheim-server](https://github.com/raykrueger/cdk-valheim-server)
-library will build an Amazon ECS cluster that runs this container on AWS
-Fargate. Note that AWS costs will apply, this will not run for free.
+AWS Cloud Development Kit library builds an Amazon ECS cluster that runs
+this container on AWS Fargate. Note that AWS costs apply — this is not free.
 
 ## I was here
 
-Note that I built this in my free time. This has nothing to do with Iron Gate AB, Coffee Stain Publishing, or my employer.
+Note that I built this in my free time. This has nothing to do with Iron
+Gate AB, Coffee Stain Publishing, or my employer.
 
 Enjoy!
 -Ray
+
+## License
+
+[Apache License 2.0](LICENSE)
