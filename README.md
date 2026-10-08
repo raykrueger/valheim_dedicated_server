@@ -3,10 +3,9 @@
 A Valheim dedicated server in a container — up and running in one command.
 
 Run a persistent Valheim world on your own hardware without wrestling with
-SteamCMD, libraries, or restart scripts. This image (running game version
-1.0.15, "Deep North") installs the server at build time, updates it from
-Steam at every start, and handles server naming, password, and admin list
-for you.
+SteamCMD, libraries, or restart scripts. This image installs the server at
+build time, updates it from Steam at every start, and handles server
+naming, password, and admin list for you. Tested with Valheim 1.0.17.
 
 ```
 docker run -d -p 2456:2456/udp -p 2457:2457/udp -v valheim_world:/root/.config/unity3d/IronGate/Valheim raykrueger/valheim
